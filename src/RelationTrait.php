@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait RelationTrait {
 
+    /**
+     * @var array
+     */
     public $related = [];
-
-    protected $relation = [
-        'phone',
-        'comments',
-        'roles',
-    ];
 
     /**
      * Refresh all relations .
@@ -47,6 +46,11 @@ trait RelationTrait {
                     $relation->updateOrCreate(isset($v['id']) ? ['id' => $v['id']] : [], array_except($v, ['id']));
 
             } elseif( $relation instanceof BelongsTo ) {
+                $value = ! is_array($value) ? [$value] : $value;
+
+                foreach ($value as $k => $v)
+                    if( $row = $relation->getRelated()->find($value) )
+                        $relation->associate($row);
 
             } elseif( $relation instanceof BelongsToMany ) {
 
@@ -68,6 +72,10 @@ trait RelationTrait {
                         }
                     }
                 }
+            } elseif( $relation instanceof MorphMany ) {
+                #@todo save morph many relationships
+            } elseif( $relation instanceof MorphToMany ) {
+                #@todo save many to many morph relationships .
             }
         }
 
