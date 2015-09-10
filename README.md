@@ -65,4 +65,7 @@ But before to send your post you have to know which format you have to follow .
 
 ***1:1*** relation
 
-
+```html
+ <input type="hidden" name="phone[id]" value="1">
+ <input name="phone[phone]" value="123456789">
+```
