@@ -86,7 +86,7 @@ But before to send your post you have to know which format you have to follow .
  
  <!-- create the comment -->
  <input name="comments[1][author]" value="Administrator">
- <input name="comments[][comment]" value="My comment inserted">
+ <input name="comments[1][comment]" value="My comment inserted">
 ```
 
 ***n:n*** Relation:
