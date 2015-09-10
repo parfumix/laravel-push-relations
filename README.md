@@ -63,9 +63,42 @@ But before to send your post you have to know which format you have to follow .
 
 ###Formats
 
-***1:1*** relation
+***1:1*** Relation:
 
 ```html
+ <!-- update the phone number -->
  <input type="hidden" name="phone[id]" value="1">
  <input name="phone[phone]" value="123456789">
+ 
+ <!-- create the phone number -->
+<input name="phone[phone]" value="123456789">
+```
+
+***1:n*** Relation:
+
+```html
+ <!-- update the comment -->
+ <input type="hidden" name="comments[1][id]" value="1">
+ <input name="comments[1][comment]" value="My comment updated">
+ 
+<!-- create the comment -->
+ <input name="comments[][comment]" value="My comment inserted">
+```
+
+***n:n*** Relation:
+
+```html
+ <!-- update the roles and their pivots -->
+ <input type="hidden" name="roles[1][sync]" value="1"> <!-- If use sync will be used laravel sync() -->
+ <input name="roles[1][id]" value="1">
+ <input name="roles[1][pivot][expire]" value="2015-10-10">
+ 
+ <!-- will be attached role using sync by default -->
+ <input name="roles[id]" value="1">
+
+ <!-- will be create new role and attached to curent model -->
+ <input type="hidden" name="roles[1][sync]" value="1"> <!-- If use sync will be used laravel sync() -->
+ <input name="roles[1][slug]" value="admin">
+ <input name="roles[1][name]" value="admin">
+ <input name="roles[1][pivot][expire]" value="2015-10-10">
 ```
