@@ -1,0 +1,18 @@
+{
+  "name": "parfumix/laravel-push-relations",
+  "description": "Laravel push relations",
+  "authors": [
+    {
+      "name": "Radu",
+      "email": "radu.bordei89@gmail.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Laravel\\Relations\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
