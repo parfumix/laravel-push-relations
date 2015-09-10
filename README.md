@@ -39,7 +39,7 @@ class Page extends Model {
     }
 }
 
-Class Comment extends Model {
+class Comment extends Model {
     
     public function page() {
         return $this->belongsTo(Page::class)
@@ -52,8 +52,8 @@ To store the relations you have to
 ```php
  
  if($_POST) {
-     $user = App\User::find($request->get('page_id'))
-     $user->fill($request->all())
+     $page = App\Page::find($request->get('page_id'))
+     $page->fill($request->all())
          ->refresh($request->all())
          ->save();
  }
