@@ -36,14 +36,15 @@ trait RelationTrait {
 
             $relation = $this->{$key}();
 
-
             if( $relation instanceof HasOne ) {
 
                 $relation->updateOrCreate(isset($value['id']) ? ['id' => $value['id']] : [], array_except($value, ['id']));
             } elseif( $relation instanceof HasMany ) {
 
-                foreach ($value as $v)
+                foreach ($value as $v) {
+                    $relation = $this->{$key}();
                     $relation->updateOrCreate(isset($v['id']) ? ['id' => $v['id']] : [], array_except($v, ['id']));
+                }
 
             } elseif( $relation instanceof BelongsTo ) {
                 $value = ! is_array($value) ? [$value] : $value;
