@@ -62,3 +62,7 @@ To store the relations you have to
 But before to send your post you have to know which format you have to follow .
 
 ###Formats
+
+***1:1*** relation
+
+
