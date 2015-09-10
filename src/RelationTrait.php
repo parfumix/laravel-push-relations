@@ -23,6 +23,9 @@ trait RelationTrait {
      * @return $this
      */
     public function refresh(array $attributes) {
+        if(! $this['exists'])
+            return $this;
+
         if( isset($this->relation) ) {
             foreach ($this->relation as $relation) {
                 if(array_key_exists($relation, $attributes))
