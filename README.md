@@ -68,10 +68,12 @@ But before to send your post you have to know which format you have to follow .
 ```html
  <!-- update the phone number -->
  <input type="hidden" name="phone[id]" value="1">
+ <input name="phone[prefix]" value="+373">
  <input name="phone[phone]" value="123456789">
  
  <!-- create the phone number -->
-<input name="phone[phone]" value="123456789">
+ <input name="phone[prefix]" value="+373">
+ <input name="phone[phone]" value="123456789">
 ```
 
 ***1:n*** Relation:
@@ -79,9 +81,11 @@ But before to send your post you have to know which format you have to follow .
 ```html
  <!-- update the comment -->
  <input type="hidden" name="comments[1][id]" value="1">
+ <input name="comments[1][author]" value="Administrator">
  <input name="comments[1][comment]" value="My comment updated">
  
-<!-- create the comment -->
+ <!-- create the comment -->
+ <input name="comments[1][author]" value="Administrator">
  <input name="comments[][comment]" value="My comment inserted">
 ```
 
