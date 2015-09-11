@@ -30,7 +30,7 @@ class Page extends Model {
 
     use RelationTrait;
     
-    public $relations = [
+    public $relationShips = [
        'comments' => App\Comment::class
     ];
     
