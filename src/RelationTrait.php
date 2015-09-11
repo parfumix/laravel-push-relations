@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait RelationTrait {
 
-
     /**
      * Refresh all relationShips .
      *
