@@ -25,6 +25,9 @@ trait RelationTrait {
 
         if( isset($this->relation) ) {
             foreach ($this->relation as $relation => $class) {
+                if( is_numeric($relation))
+                    $relation = $class;;
+
                 if(array_key_exists($relation, $attributes))
                     $toInsert[$relation] = array_pull($attributes, $relation);
             }
