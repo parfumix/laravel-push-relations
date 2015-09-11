@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Auth;
 
 trait RelationTrait {
 
@@ -24,9 +25,29 @@ trait RelationTrait {
         $toInsert = [];
 
         if( isset($this->relation) ) {
-            foreach ($this->relation as $relation => $class) {
-                if( is_numeric($relation))
-                    $relation = $class;;
+            foreach ($this->relation as $relation => $options) {
+                if( is_numeric($relation)) {
+                    $relation = $options; $options = [];
+                }
+
+
+                /**
+                 * Adding security on save . By default only administrator has access to save relations .
+                 */
+                if( ! isset($options['access']) )
+                    $options['access'] = function() {
+                        $user = Auth::user();
+
+                        if(! $user) return false;
+
+                        if( in_array($user->name, ['admin']) )
+                            return true;
+                    };
+
+                $isGranted = ($options['access'] instanceof \Closure) ? $options['access']() : $options['access'];
+
+                if( ! $isGranted )
+                    continue;
 
                 if(array_key_exists($relation, $attributes))
                     $toInsert[$relation] = array_pull($attributes, $relation);
