@@ -12,11 +12,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 trait RelationTrait {
 
     /**
-     * @var array
-     */
-    public $related = [];
-
-    /**
      * Refresh all relations .
      *
      * @param array $attributes
@@ -26,14 +21,16 @@ trait RelationTrait {
         if(! $this['exists'])
             return $this;
 
+        $toInsert = [];
+
         if( isset($this->relation) ) {
             foreach ($this->relation as $relation) {
                 if(array_key_exists($relation, $attributes))
-                    $this->related[$relation] = array_pull($attributes, $relation);
+                    $toInsert[$relation] = array_pull($attributes, $relation);
             }
         }
 
-        foreach ($this->related as $key => $value) {
+        foreach ($toInsert as $key => $value) {
             if( ! method_exists($this, $key) )
                 continue;
 
