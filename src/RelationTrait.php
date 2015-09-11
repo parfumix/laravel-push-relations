@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait RelationTrait {
 
+
     /**
-     * Refresh all relations .
+     * Refresh all relationShips .
      *
      * @param array $attributes
      * @return $this
@@ -23,8 +24,8 @@ trait RelationTrait {
 
         $toInsert = [];
 
-        if( isset($this->relation) ) {
-            foreach ($this->relation as $relation) {
+        if( isset($this->relationShips) ) {
+            foreach ($this->relationShips as $relation => $class) {
                 if(array_key_exists($relation, $attributes))
                     $toInsert[$relation] = array_pull($attributes, $relation);
             }
@@ -74,9 +75,9 @@ trait RelationTrait {
                     }
                 }
             } elseif( $relation instanceof MorphMany ) {
-                #@todo save morph many relationships
+                #@todo save morph many relationShipships
             } elseif( $relation instanceof MorphToMany ) {
-                #@todo save many to many morph relationships .
+                #@todo save many to many morph relationShipships .
             }
         }
 
