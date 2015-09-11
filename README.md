@@ -31,7 +31,7 @@ class Page extends Model {
     use RelationTrait;
     
     public $relations = [
-       'comments' => $this->comments()
+       'comments' => App\Comment::class
     ];
     
     public function comments() {
