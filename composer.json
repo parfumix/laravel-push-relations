@@ -7,7 +7,14 @@
       "email": "radu.bordei89@gmail.com"
     }
   ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:flysap/users.git"
+    }
+  ],
   "require": {
+    "flysap/users": "dev-master"
   },
   "autoload": {
     "psr-4": {
