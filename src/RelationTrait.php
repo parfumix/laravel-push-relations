@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Facades\Auth;
+use Flysap\Users;
 
 trait RelationTrait {
 
@@ -30,25 +30,10 @@ trait RelationTrait {
                     $relation = $options; $options = [];
                 }
 
-
-                /**
-                 * Adding security on save . By default only administrator has access to save relations .
-                 */
-                if( ! isset($options['access']) )
-                    $options['access'] = function() {
-                        $user = Auth::user();
-
-                        if(! $user) return false;
-
-                        if( in_array($user->name, ['admin']) )
-                            return true;
-                    };
-
-                $isGranted = ($options['access'] instanceof \Closure) ? $options['access']() : $options['access'];
-
-                if( ! $isGranted )
+                if(! $this->isGranted($options))
                     continue;
 
+                /** If security is granted than add relation to processing . */
                 if(array_key_exists($relation, $attributes))
                     $toInsert[$relation] = array_pull($attributes, $relation);
             }
@@ -108,5 +93,28 @@ trait RelationTrait {
         }
 
         return $this;
+    }
+
+    /**
+     * Allow current user to update that relation ?
+     *
+     * @param array $attributes
+     * @param array $defaultAllowedRole
+     * @return bool
+     */
+    protected function isGranted(array $attributes, $defaultAllowedRole = ['admin']) {
+        /** By default we have to add that only to admins . */
+        if(! isset($attributes['permissions']) && !isset($attributes['roles']))
+            $attributes['roles'] = $defaultAllowedRole;
+
+        if( isset($attributes['permissions']) )
+            if( ! Users\can($attributes['permissions']) )
+                return false;
+
+        if( isset($attributes['roles']) )
+            if(! Users\is($attributes['roles']))
+                return false;
+
+        return true;
     }
 }
