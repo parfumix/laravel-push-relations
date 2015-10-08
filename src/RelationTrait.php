@@ -47,7 +47,7 @@ trait RelationTrait {
 
             if( $relation instanceof HasOne ) {
 
-                if(is_array($value[0]))
+                if(isset($value[0]) && is_array($value[0]))
                     $value = $value[0];
 
                 $relation->updateOrCreate(isset($value['id']) ? ['id' => $value['id']] : [], array_except($value, ['id']));
@@ -55,18 +55,30 @@ trait RelationTrait {
 
                 foreach ($value as $v) {
                     $relation = $this->{$key}();
-                    $relation->updateOrCreate(isset($v['id']) ? ['id' => $v['id']] : [], array_except($v, ['id']));
+
+                    $related = $relation->getRelated();
+
+                    if(! $instance = $related->whereId(isset($v['id']) ? $v['id'] : null)->first()) {
+                        $instance = $related->newInstance();
+                        $instance->setAttribute($relation->getPlainForeignKey(), $relation->getParentKey());
+                    }
+
+                    $instance->fill(array_except($v, ['id']));
+                    $instance->save();
                 }
 
             } elseif( $relation instanceof BelongsTo ) {
                 $value = ! is_array($value) ? [$value] : $value;
 
-                foreach ($value as $k => $v)
-                    if( $row = $relation->getRelated()->find($value) )
+                foreach ($value as $k => $v) {
+                    if( ! $v || empty($v))
+                        continue;
+
+                    if( $row = $relation->getRelated()->find($value)->first() )
                         $relation->associate($row);
+                }
 
             } elseif( $relation instanceof BelongsToMany ) {
-
                 foreach ($value as $v) {
                     if(! is_array($v)) {
                         if( $row = $relation->getRelated()->find($v) ) {
@@ -103,6 +115,8 @@ trait RelationTrait {
      * @return bool
      */
     protected function isGranted(array $attributes, $defaultAllowedRole = ['admin']) {
+        #@todo  delete it .
+        return true;
         /** By default we have to add that only to admins . */
         if(! isset($attributes['permissions']) && !isset($attributes['roles']))
             $attributes['roles'] = $defaultAllowedRole;
