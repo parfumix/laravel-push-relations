@@ -115,8 +115,6 @@ trait RelationTrait {
      * @return bool
      */
     protected function isGranted(array $attributes, $defaultAllowedRole = ['admin']) {
-        #@todo  delete it .
-        return true;
         /** By default we have to add that only to admins . */
         if(! isset($attributes['permissions']) && !isset($attributes['roles']))
             $attributes['roles'] = $defaultAllowedRole;
